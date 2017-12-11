@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 @Component({
     selector: 'main',
     template: require('./main.html'),
-    styles: [require('./main.scss')],
+    styles: [require('./main.scss')]
 })
 export class MainComponent implements OnInit {
     Http;
@@ -14,13 +14,26 @@ export class MainComponent implements OnInit {
     awesomeThings = [];
     newThing = '';
 
-    static parameters = [Http];
-    constructor(private http: Http) {
-        this.Http = http;
+    GENRES_ENDPOINT: string = "/api/genres/:id";
+    GAMES_ENDPOINT: string = "/api/games/:id";
+    PLACEMENTS_ENDPOINT: string = "/api/games/:id/placements";
 
+    static parameters = [Http];
+    constructor(
+        private http: Http
+    ) {
+        this.Http = http;
     }
 
     ngOnInit() {
+        this.getGames()
+            .subscribe(games => {
+                console.log("Games: ", games)
+            })
+        this.getGenres()
+            .subscribe(genres => {
+                console.log("Genres: ", genres)
+            })
         return this.Http.get('/api/things')
             .map(res => res.json())
             // .catch(err => Observable.throw(err.json().error || 'Server error'))
@@ -29,6 +42,22 @@ export class MainComponent implements OnInit {
 
             });
     }
+
+    getGenres(): Observable<any> {
+        return (
+            this.http
+                .get(this.GENRES_ENDPOINT.replace(/:id/, ""))
+                .map((r) => r.json())
+        )
+    }
+
+    getGames(): Observable<any> {
+        return (
+            this.http
+                .get(this.GAMES_ENDPOINT.replace(/:id/, ""))
+                .map((r) => r.json())
+        )
+    } 
 
 
     addThing() {
