@@ -32,7 +32,7 @@ export class MainComponent implements OnInit {
 
 
     addThing() {
-        if(this.newThing) {
+        if (this.newThing) {
             let text = this.newThing;
             this.newThing = '';
 
