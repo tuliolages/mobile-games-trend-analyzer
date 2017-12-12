@@ -6,6 +6,53 @@
   </div>
 </header>
 
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-6'>
+      <div class="form-group">
+        <label>Select a genre:</label>
+        <select class='form-control' [(ngModel)]="selectedGenre" (change)="onGameGenreSelectChange()">
+          <option *ngFor="let genre of genres" [ngValue]="genre">{{genre.name}}</option>
+        </select>
+      </div>
+      <div class="form-group"> 
+        <button class='btn btn-default'>Adicionar</button>
+      </div>
+    </div>
+    <div class='col-md-6'>
+      <div class="form-group">
+        <label>Select a game:</label>
+        <select class='form-control' [(ngModel)]="selectedGame">
+          <option [ngValue]="allGames">All</option>
+          <option *ngFor="let game of games" [ngValue]="game">{{game.title}}</option>
+        </select>
+      </div>
+      <div class="form-group"> 
+        <button class='btn btn-default'>Adicionar</button>
+      </div>
+    </div>
+    <div class='col-md-8'>
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class="form-group">
+            <label>Select a curve degree:</label>
+            <select [(ngModel)]="selectedCurveDegree">
+              <option [value]="2">Line</option>
+              <option selected [value]="3">Parabola</option>
+              <option [value]="4">Polynomial</option>
+            </select>
+          </div>
+        </div>
+        <div class='col-md-6'></div>
+      </div>
+      Graph
+    </div>
+    <div class='col-md-6'>
+      Lista de jogos e generos selecionados
+    </div>
+  </div>
+</div>
+
 <div class="container">
   <div class="row">
     <div class="col-lg-12">
