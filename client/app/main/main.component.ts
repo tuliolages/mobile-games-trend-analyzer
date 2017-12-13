@@ -3,6 +3,9 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import { Graph } from './Graph';
+import { GeneticWrapper } from "./GeneticWrapper";
+
 enum CurveDegrees {
     LINE = 2,
     PARABOLA = 3,
@@ -31,7 +34,9 @@ export class MainComponent implements OnInit {
     selectedGame: any = null;
     selectedGenre: any = null;
     games: any[] = [];
+    filteredGames = [];
     genres: any[] = [];
+    graph = null;
 
     selectedGames: any[] = [];
     selectedGenres: any[] = [];
@@ -50,19 +55,24 @@ export class MainComponent implements OnInit {
             .subscribe(games => {
                 console.log("Games: ", games)
                 this.games = games;
+                this.filteredGames = games;
             })
         this.getGenres()
             .subscribe(genres => {
                 console.log("Genres: ", genres)
                 this.genres = genres;
             })
-        return this.Http.get('/api/things')
+        this.Http.get('/api/things')
             .map(res => res.json())
             // .catch(err => Observable.throw(err.json().error || 'Server error'))
             .subscribe(things => {
                 this.awesomeThings = things;
 
             });
+
+        // Draws an empty graph on init
+        this.graph = new Graph(document.getElementById("scratch"), 10, 10);
+        this.drawGameGraph([], 10, 10);
     }
 
     getGenres(): Observable<any> {
@@ -81,8 +91,28 @@ export class MainComponent implements OnInit {
         )
     }
 
-    onGameGenreSelectChange() {
+    onGenreSelectChange() {
+        this.getGamesFilteredByGender()
+    }
 
+    onGameSelectChange() {
+
+    }
+
+    getGamesFilteredByGender() {
+        if (this.selectedGenre === 'allGenres') return this.filteredGames = this.games
+
+        return this.filteredGames = this.games.filter(game => {
+            return game.genre_id === this.selectedGenre._id
+        })
+    }
+
+    drawGameGraph(positions, ymax, color) {
+        this.graph.compareAndSetXMax(positions.length);
+        this.graph.compareAndSetYMax(ymax);
+        this.graph.addVerticesGroup(positions, color);   
+        this.graph.draw();
+        this.graph.drawVertices();
     }
 
     addThing() {
