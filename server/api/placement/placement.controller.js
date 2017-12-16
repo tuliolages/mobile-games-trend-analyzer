@@ -1,17 +1,15 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET     /api/placements              ->  index
- * POST    /api/placements              ->  create
- * GET     /api/placements/:id          ->  show
- * PUT     /api/placements/:id          ->  upsert
- * PATCH   /api/placements/:id          ->  patch
- * DELETE  /api/placements/:id          ->  destroy
+ * GET     /api/games/:id/placements    ->  show
+ * GET     /api/genres/:id/placements   ->  showGenre
  */
 
 'use strict';
 
 import { applyPatch } from 'fast-json-patch';
-import {Placement} from '../../sqldb';
+import Sequelize from 'sequelize';
+
+import {Placement, Game} from '../../sqldb';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -70,9 +68,30 @@ export function index(req, res) {
 
 // Gets a single Placement from the DB
 export function show(req, res) {
-  return Placement.find({
+  return Placement.findAll({
     where: {
-      _id: req.params.id
+      game_id: req.params.id,
+      date: {
+        between: [req.query.start_date, req.query.end_date]
+      }
+    }
+  })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Gets a single Placement from the DB
+export function showGenre(req, res) {
+  return Placement.findAll({
+    include: [{
+      model: Game,
+      where: { genre_id: req.params.id }
+    }],
+    where: {
+      date: {
+        between: [req.query.start_date, req.query.end_date]
+      }
     }
   })
     .then(handleEntityNotFound(res))

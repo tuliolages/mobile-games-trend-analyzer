@@ -6,10 +6,8 @@ var controller = require('./placement.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
-router.get('/:id', controller.show);
+router.get('/games/:id/placements', controller.show);
+router.get('/genres/:id/placements', controller.showGenre);
 router.post('/', controller.create);
-router.put('/:id', controller.upsert);
-router.patch('/:id', controller.patch);
-router.delete('/:id', controller.destroy);
 
 module.exports = router;

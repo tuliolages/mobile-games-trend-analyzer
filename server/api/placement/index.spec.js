@@ -5,18 +5,12 @@ var proxyquire = require('proxyquire').noPreserveCache();
 var placementCtrlStub = {
   index: 'placementCtrl.index',
   show: 'placementCtrl.show',
-  create: 'placementCtrl.create',
-  upsert: 'placementCtrl.upsert',
-  patch: 'placementCtrl.patch',
-  destroy: 'placementCtrl.destroy'
+  create: 'placementCtrl.create'
 };
 
 var routerStub = {
   get: sinon.spy(),
-  put: sinon.spy(),
-  patch: sinon.spy(),
-  post: sinon.spy(),
-  delete: sinon.spy()
+  post: sinon.spy()
 };
 
 // require the index with our stubbed out modules

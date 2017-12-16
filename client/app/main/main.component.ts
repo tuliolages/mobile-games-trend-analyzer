@@ -107,6 +107,34 @@ export class MainComponent implements OnInit {
         })
     }
 
+    selectGenre() {
+        const genre = {
+            ...this.selectedGenre,
+            placements: [],
+            color: this.getRandomColor(),
+            vertices: [],//gameComputedData.vertices,
+            highestPlacement: -1,//gameComputedData.ymax,
+            solutions: [],
+            geneticWrapper: null
+        }
+
+        this.selectedGenres.push(genre)
+        this.selectedGenre = null
+    }
+
+    unselectGenre(index) {
+        this.selectedGenres.splice(index, 1);
+    }
+
+    getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
     drawGameGraph(positions, ymax, color) {
         this.graph.compareAndSetXMax(positions.length);
         this.graph.compareAndSetYMax(ymax);

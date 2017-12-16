@@ -6,7 +6,7 @@ export default function(sequelize, DataTypes) {
             type: DataTypes.INTEGER,
         },
         date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             defaultValue: sequelize.NOW,
         }
     }, {
