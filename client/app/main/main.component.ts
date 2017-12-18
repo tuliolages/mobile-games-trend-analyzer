@@ -27,10 +27,10 @@ declare var Genetic: any;
 export class MainComponent implements OnInit {
     Http;
 
-    GENRES_ENDPOINT: string = `${API_HOST}/api/genres/:id`;
-    GAMES_ENDPOINT: string = `${API_HOST}/api/games/:id`;
-    GAME_PLACEMENTS_ENDPOINT: string = `${API_HOST}/api/games/:id/placements`;
-    GENRE_PLACEMENTS_ENDPOINT: string = `${API_HOST}/api/genres/:id/placements`;
+    GENRES_ENDPOINT: string = `/api/genres/:id`;
+    GAMES_ENDPOINT: string = `/api/games/:id`;
+    GAME_PLACEMENTS_ENDPOINT: string = `/api/games/:id/placements`;
+    GENRE_PLACEMENTS_ENDPOINT: string = `/api/genres/:id/placements`;
 
     _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
