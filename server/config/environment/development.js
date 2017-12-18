@@ -7,16 +7,21 @@ module.exports = {
 
     // Sequelize connection opions
     sequelize: {
-        uri: 'sqlite://',
+        uri: process.env.SEQUELIZE_URI || 'postgres://postgres:1234@localhost:5432/dev',
         options: {
-            logging: false,
-            storage: 'dev.sqlite',
-            define: {
-                timestamps: false
-            }
-        }
-    },
-
-    // Seed database on startup
-    seedDB: true
+          //logging: false,
+          dialect: 'postgres',
+          host: 'localhost',
+          port: 5432,
+          username: 'postgres',
+          password: '1234',
+    
+          define: {
+            timestamps: false
+          }
+        }     
+      },
+    
+      seedDB: true
+    };
 };
