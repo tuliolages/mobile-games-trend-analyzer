@@ -30,7 +30,10 @@ export class MainComponent implements OnInit {
 
     GENRES_ENDPOINT: string = `${API_HOST}/api/genres/:id`;
     GAMES_ENDPOINT: string = `${API_HOST}/api/games/:id`;
-    PLACEMENTS_ENDPOINT: string = `${API_HOST}/api/games/:id/placements`;
+    GAME_PLACEMENTS_ENDPOINT: string = `${API_HOST}/api/games/:id/placements`;
+    GENRE_PLACEMENTS_ENDPOINT: string = `${API_HOST}/api/genres/:id/placements`;
+
+    _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
     selectedGame: any = null;
     selectedGenre: any = null;
@@ -56,6 +59,9 @@ export class MainComponent implements OnInit {
     selectedDateRange: any;
     selectedDateRangeIndex: number = 0;
     
+    geneticWrapper: GeneticWrapper;
+    genetic: any = undefined;
+    userData: any[] = undefined;
 
     static parameters = [Http];
     constructor(
@@ -95,6 +101,30 @@ export class MainComponent implements OnInit {
         return (
             this.http
                 .get(this.GAMES_ENDPOINT.replace(/:id/, ""))
+                .map((r) => r.json())
+        )
+    }
+
+    getGamePlacements(gameID, start_date, end_date): Observable<any> {
+        return (
+            this.http
+                .get(
+                    this.GAME_PLACEMENTS_ENDPOINT.replace(/:id/, gameID)
+                    + `?start_date=${start_date}`
+                    + `&end_date=${end_date}`
+                )
+                .map((r) => r.json())
+        )
+    }
+
+    getGenrePlacements(genreID, start_date, end_date): Observable<any> {
+        return (
+            this.http
+                .get(
+                    this.GENRE_PLACEMENTS_ENDPOINT.replace(/:id/, genreID)
+                    + `?start_date=${start_date}`
+                    + `&end_date=${end_date}`
+                )
                 .map((r) => r.json())
         )
     }
@@ -160,6 +190,48 @@ export class MainComponent implements OnInit {
     unselectGenre(index) {
         this.selectedGenres.splice(index, 1);
     }
+
+    mapDateToId(beginDate: Date, endDate: Date) {
+        let utc1 = Date.UTC(beginDate.getFullYear(), beginDate.getMonth(), beginDate.getDate());
+        let self = this;
+    
+        return function(date: Date) {
+          // Discard the time and time-zone information.
+          // var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+          // var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+          let utc2 = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+        
+          // return Math.floor((utc2 - utc1) / this._MS_PER_DAY);
+          return Math.floor((utc2 - utc1) / self._MS_PER_DAY);
+        }
+      }
+
+    computeGameVertices(gameData) {
+        let ymax = 0;
+        let mapDate = this.mapDateToId(
+          new Date(this.selectedDateRange.beginDate.year,
+                   this.selectedDateRange.beginDate.month,
+                   this.selectedDateRange.beginDate.day),
+          new Date(this.selectedDateRange.endDate.year,
+                   this.selectedDateRange.endDate.month,
+                   this.selectedDateRange.endDate.day)
+        );
+    
+        // Map placements to int list
+        let vertices = gameData.placements.map((placement) => {
+          if (placement.position > ymax) {
+            ymax = placement.position;
+          }
+          let gameData = [mapDate(new Date(placement.date)), placement.position];
+          // console.log(gameData[0] + " - " + gameData[1]);
+          return gameData;
+        });
+    
+        return {
+          vertices: vertices,
+          ymax: ymax
+        };
+      }
 
     getRandomColor() {
         var letters = '0123456789ABCDEF';
@@ -236,26 +308,73 @@ export class MainComponent implements OnInit {
     }
 
     getDataAndComputeCurves() {
+        this.graph = new Graph(document.getElementById("scratch"), 10, 10);
         this.getDataFromServer()
-        this.buildCurves()
     }
 
     getDataFromServer() {
-        let selectedBeginDate = this.selectedDateRange.beginDate;
-        let beginDate = new Date(selectedBeginDate.year, 
-                                selectedBeginDate.month, 
-                                selectedBeginDate.day,
-                                0, 0, 0, 0);
-    
-        let selectedEndDate = this.selectedDateRange.endDate;
-        let endDate = new Date(selectedEndDate.year, 
-                                selectedEndDate.month, 
-                                selectedEndDate.day,
-                                0, 0, 0, 0);
+        var { day, month, year } = this.selectedDateRange.beginDate;
+        let beginDate = `${year}-${month}-${day}`
+
+        var { day, month, year } = this.selectedDateRange.endDate;
+        let endDate = `${year}-${month}-${day}`
+        
+        for (let i = 0; i < this.selectedGames.length; i++) {
+            const id = this.selectedGames[i]._id;
+            
+            this.getGamePlacements(id, beginDate, endDate)
+                .subscribe(data => {
+                    this.selectedGames[i].placements = data;
+                    
+                    let gameComputedData = this.computeGameVertices(this.selectedGames[i]);
+                    
+                    this.selectedGames[i].vertices = gameComputedData.vertices;
+                    this.selectedGames[i].highestPlacement = gameComputedData.ymax;
+                    console.log('build', this.selectedGames[i])
+                    this.buildCurve(this.selectedGames[i], i);
+
+                    console.log(data)
+                })
+        }
+
+        for (let i = 0; i < this.selectedGenres.length; i++) {
+            const id = this.selectedGenres[i]._id;
+            
+            this.getGamePlacements(id, beginDate, endDate)
+                .subscribe(data => {
+                    this.selectedGenres[i].placements = data;
+                    
+                    let gameComputedData = this.computeGameVertices(this.selectedGenres[i]);
+                    
+                    this.selectedGenres[i].vertices = gameComputedData.vertices;
+                    this.selectedGenres[i].highestPlacement = gameComputedData.ymax;
+                    console.log('build', this.selectedGenres[i])
+                    this.buildCurve(this.selectedGenres[i], i);
+
+                    console.log(data)
+                })
+        }
     }
 
-    buildCurves() {
+    buildCurve(item, index) {
+        this.drawGameGraph(item.vertices, item.highestPlacement, item.color);
 
+        let config = {
+            "iterations": 500, 
+            "size": 250, 
+            "crossover": 0.4, 
+            "mutation": 1.0, 
+            "skip": 10
+        };
+        
+        var userData = {
+            "terms": this.selectedCurveDegree,
+            "vertices": item.vertices
+        };
+
+        this.geneticWrapper = new GeneticWrapper(this.graph, userData, index, item.color);
+        this.graph.geneticWrapper = this.geneticWrapper;
+        this.geneticWrapper.genetic.evolve(config, userData);
     }
 }
 
@@ -265,7 +384,7 @@ function padZero(str, len = null) {
     return (zeros + str).slice(-len);
 }
 
-function invertColor(hex, bw) {
+function invertColor(hex, bw = true) {
     if (hex.indexOf('#') === 0) {
         hex = hex.slice(1);
     }
@@ -276,9 +395,9 @@ function invertColor(hex, bw) {
     if (hex.length !== 6) {
         throw new Error('Invalid HEX color.');
     }
-    var r = parseInt(hex.slice(0, 2), 16),
-        g = parseInt(hex.slice(2, 4), 16),
-        b = parseInt(hex.slice(4, 6), 16);
+    let r:any = parseInt(hex.slice(0, 2), 16),
+        g:any = parseInt(hex.slice(2, 4), 16),
+        b:any = parseInt(hex.slice(4, 6), 16);
     if (bw) {
         // http://stackoverflow.com/a/3943023/112731
         return (r * 0.299 + g * 0.587 + b * 0.114) > 186

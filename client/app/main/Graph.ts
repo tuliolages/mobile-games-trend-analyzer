@@ -276,9 +276,9 @@ export class Graph {
 			for (let j = 0; j < verticesGroup.length; ++j) {
 				let cx = verticesGroup[j][0] * xstride + bound[3];
 				let cy = bound[3] + verticesGroup[j][1] * ystride;
-				console.log(cy);
-				console.log(bound[2]);
-				console.log(bound[3] + verticesGroup[j][1] * ystride);
+				// console.log(cy);
+				// console.log(bound[2]);
+				// console.log(bound[3] + verticesGroup[j][1] * ystride);
 				// let cy = bound[2] - verticesGroup[j][1] * ystride;
 	
 				// console.log("Vertice: ", verticesGroup[i]);
