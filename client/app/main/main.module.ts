@@ -7,6 +7,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { TooltipModule } from 'ngx-bootstrap';
 
+import { MyDateRangePickerModule } from 'mydaterangepicker';
+
 import { MainComponent } from './main.component';
 
 
@@ -23,6 +25,7 @@ export const ROUTES: Routes = [
 
 
         TooltipModule.forRoot(),
+        MyDateRangePickerModule
     ],
     declarations: [
         MainComponent,

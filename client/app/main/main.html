@@ -1,8 +1,8 @@
 <header class="hero-unit" id="banner">
   <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
+    <h1>Mobile Trend Curves Analyzer</h1>
+    <p class="lead">Create and compare trending curves for any mobile game or genre</p>
+    <!-- <img src="assets/images/yeoman.png" alt="I'm Yeoman"> -->
   </div>
 </header>
 
@@ -17,7 +17,7 @@
         </select>
       </div>
       <div class="form-group"> 
-        <button class='btn btn-default' (click)="selectGenre()">Adicionar</button>
+        <button class='btn btn-default' (click)="selectGenre()">Add genre to selection</button>
       </div>
     </div>
     <div class='col-md-6'>
@@ -29,12 +29,12 @@
         </select>
       </div>
       <div class="form-group"> 
-        <button class='btn btn-default'>Adicionar</button>
+        <button class='btn btn-default' (click)="selectGame()">Add game to selection</button>
       </div>
     </div>
-    <div class='col-md-8'>
+    <div class='col-md-12'>
       <div class='row'>
-        <div class='col-md-6'>
+        <div class='col-md-3'>
           <div class="form-group">
             <label>Select a curve degree:</label>
             <select class='form-control' [(ngModel)]="selectedCurveDegree">
@@ -44,19 +44,39 @@
             </select>
           </div>
         </div>
-        <div class='col-md-6'></div>
-      </div>
-      <div class='row'>
-        <div class='col-md-12'>
-          <canvas 
-            #scratch 
-            id="scratch" 
-            style="width: 800px; height: 500px; cursor: crosshair;"
-          ></canvas>
+        <div class='col-md-9'>
+          <label>Select a date range:</label>
+          <div class="date-range-picker-wrapper">
+            <div class="btn-group" role="group" aria-label="Data ranges">
+              <button 
+                *ngFor="let presetDateRange of presetDateRangesList; let i = index; let last = last;"
+                class='btn btn-default' 
+                [ngClass]="{'active': selectedDateRangeIndex === i}"
+                (click)="selectDateRange(i)">
+                {{presetDateRange.label}}
+              </button>
+            </div>
+            
+            <form *ngIf="presetDateRangesList[selectedDateRangeIndex].label === 'Custom range'" class="date-range" novalidate>
+                <my-date-range-picker name="mydaterange" [(options)]="myDateRangePickerOptions"
+                                [(ngModel)]="selectedDateRange" required></my-date-range-picker>
+            </form>
+        
+          </div>
         </div>
       </div>
     </div>
-    <div class='col-md-4'>
+    <div class='col-md-12'>
+      <button class='btn btn-default' (click)="getDataAndComputeCurves()">Computar curvas</button>      
+    </div>
+    <div class='col-md-8'>
+      <canvas 
+        #scratch 
+        id="scratch" 
+        style="width: 800px; height: 500px; cursor: crosshair;"
+      ></canvas>
+    </div>
+    <div class='col-md-3 col-md-offset-1'>
       <div class="row">
         <div class="col-lg-12">
           <p class="page-header">Selected Genres:</p>
@@ -89,14 +109,10 @@
               (click)="changeColor(i)"
               class="selected-item-color" [style.background-color]="selectedGame.color"
             >
-              <a  [tooltip]="selectedGame.name">
-                {{selectedGame.name}}
-                <button type="button" class="close" (click)="unselectGenre(i)">&times;</button>
-                <!--
-                  <img src="{{entry.game.icon}}" class="game-icon">
-                  <p class="game-title">{{entry.game.title}}</p>
-                  <span ></span>
-                -->
+              <a  [tooltip]="selectedGame.title">
+                <img src="{{selectedGame.icon}}" class="game-icon">               
+                <span [style.color]="selectedGame.textColor">{{selectedGame.title}}</span>
+                <button type="button" class="close" (click)="unselectGame(i)">&times;</button>
               </a>
             </li>
           </ul>
