@@ -33,7 +33,7 @@ var all = {
 
     // Secret for session, you will want to change this and make it an environment variable
     secrets: {
-        session: 'tcc2-secret'
+        session: 'mobile-games-trend-analyzer-secret'
     },
 
     // MongoDB connection options

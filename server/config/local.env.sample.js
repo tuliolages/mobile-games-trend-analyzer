@@ -7,7 +7,7 @@
 
 module.exports = {
     DOMAIN: 'http://localhost:9000',
-    SESSION_SECRET: 'tcc2-secret',
+    SESSION_SECRET: 'mobile-games-trend-analyzer-secret',
 
     // Control debug level for modules using visionmedia/debug
     DEBUG: ''

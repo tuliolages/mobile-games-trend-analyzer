@@ -1,5 +1,5 @@
 {
-  "name": "tcc2",
+  "name": "mobile-games-trend-analyzer",
   "version": "0.0.0",
   "main": "server/index.js",
   "dependencies": {
