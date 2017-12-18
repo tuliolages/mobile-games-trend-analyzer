@@ -18,7 +18,6 @@ enum CurveDegrees {
 
 declare var document: any;
 declare var Genetic: any;
-declare var Plotly: any;
 
 @Component({
     selector: 'main',
