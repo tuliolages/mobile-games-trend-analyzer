@@ -129,7 +129,7 @@ export class MainComponent implements OnInit {
     }
 
     onGenreSelectChange() {
-        this.getGamesFilteredByGender()
+        // this.getGamesFilteredByGender()
     }
 
     onGameSelectChange() {
