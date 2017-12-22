@@ -150,7 +150,7 @@ VALUES
 ('com.kiloo.subwaysurf', '2017-12-16', 253),
 ('com.kiloo.subwaysurf', '2017-12-17', 265),
 ('com.kiloo.subwaysurf', '2017-12-18', 277),
-('com.kiloo.subwaysurf', '2017-12-19', 263);
+('com.kiloo.subwaysurf', '2017-12-19', 263),
 
 ('com.supercell.clashofclans', '2017-11-22', 251),
 ('com.supercell.clashofclans', '2017-11-23', 239),
