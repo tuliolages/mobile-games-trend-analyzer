@@ -99,4 +99,6 @@ VALUES
 ( 'net.peakgames.ginrummyplus', 'Gin Rummy Plus', '//lh3.googleusercontent.com/Ux9QHB7rRehY6fhnZtddqYO4D9qEsqO63iYqe6Zf-clR_r8JYrBzdISXwHORgsG9E8s=w340', 'CARD' ),
 ( 'com.metafun.solitaire.free.hd', 'Solitaire', '//lh3.googleusercontent.com/R1MUDVdKwuI9BQq08EnZVNltA9Z_MhArl3IwSz7gma3kkW0CjQbsGXea6xCNfUqrzF0=w340', 'CARD' ),
 ( 'com.bigblueparrot.pokerfriends', 'Poker Heat - VIP Free Texas Holdem Poker Games', '//lh3.googleusercontent.com/e8tEipml8GrPTYU90v-gIyl93JxXBmh6ZPo5Wbt6iP4IZHX0s8LJSMAPDPwFleADIno=w340', 'CARD' ),
-( 'com.mobilityware.spider', 'Spider Solitaire', '//lh3.googleusercontent.com/L5SicPHwNaeuMPkQikseSWAeaWSsJw7ujWK82oWHr4UZ79Di0_FxX3QnnNcdNK2Clmtx=w340', 'CARD' );
+( 'com.mobilityware.spider', 'Spider Solitaire', '//lh3.googleusercontent.com/L5SicPHwNaeuMPkQikseSWAeaWSsJw7ujWK82oWHr4UZ79Di0_FxX3QnnNcdNK2Clmtx=w340', 'CARD' ),
+( 'com.king.candycrushsaga', 'Candy Crush Saga', 'lh3.googleusercontent.com/1S96JSifVtyeq0JZncWyKM1md6Dg-yB_fp9XY9jptgjT7R4JisBk0aeuBo1S4ATSEpI=w340', 'CASUAL' ),
+( 'com.supercell.clashofclans', 'Clash of Clans', 'https://lh3.googleusercontent.com/_bcnEY17dORJ0xHl9XTRg7nQBNIOCYr36K9MA6HKh1zJs8a9WfIJPvlVmmSAzteaKn8=w340', 'STRATEGY' );
