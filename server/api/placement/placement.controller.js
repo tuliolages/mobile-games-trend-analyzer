@@ -106,6 +106,24 @@ export function create(req, res) {
     .catch(handleError(res));
 }
 
+export function addEntries(entries) {
+  return new Promise((res, rej) => {    
+    let promiseLine = Promise.resolve();
+
+    entries.forEach((entry) => {
+      promiseLine.then(Placement.create(entry));
+    });
+
+    promiseLine
+      .then(() => {
+        res();
+      })
+      .catch(err => {
+        rej(err);
+      });
+  });
+}
+
 // Upserts the given Placement in the DB at the specified ID
 export function upsert(req, res) {
   if(req.body._id) {

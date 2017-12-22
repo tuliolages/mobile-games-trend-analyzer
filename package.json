@@ -32,6 +32,7 @@
     "method-override": "^2.3.5",
     "morgan": "~1.8.2",
     "mydaterangepicker": "^4.1.12",
+    "node-schedule": "^1.2.5",
     "pg": "^6.4.1",
     "sequelize": "^3.23.6",
     "serve-favicon": "^2.3.0",
